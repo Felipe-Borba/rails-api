@@ -1,6 +1,7 @@
 class Users::SessionsController < Devise::SessionsController
   include RackSessionFix
   respond_to :json
+  skip_before_action :validate_admin
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
