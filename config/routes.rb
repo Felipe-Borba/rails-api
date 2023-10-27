@@ -11,7 +11,11 @@ Rails.application.routes.draw do
                registrations: 'users/registrations'
              }
 
-  resources :profiles
+  # resources :profiles
+  get '/profile', to: 'profiles#show'
+  post '/profile', to: 'profiles#create'
+  patch '/profile', to: "profiles#update"
+  put '/profile', to: "profiles#update"
 
   resources :articles do
     resources :comments

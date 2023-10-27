@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
-  before_action :set_profile, only: %i[ show update destroy ]
+  before_action :set_profile, only: %i[ show update ]
+  skip_before_action :validate_admin
 
   # GET /profiles
   # def index
@@ -8,14 +9,15 @@ class ProfilesController < ApplicationController
   #   render json: @profiles
   # end
 
-  # GET /profiles/1
+  # GET /profile
   def show
     render json: @profile
   end
 
-  # POST /profiles
+  # POST /profile
   def create
-    @profile = Profile.new(profile_params)
+    # @profile = Profile.new(profile_params)
+    @profile = current_user.build_profile(profile_params)
 
     if @profile.save
       render json: @profile, status: :created, location: @profile
@@ -24,7 +26,7 @@ class ProfilesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /profiles/1
+  # PATCH/PUT /profile
   def update
     if @profile.update(profile_params)
       render json: @profile
@@ -33,12 +35,8 @@ class ProfilesController < ApplicationController
     end
   end
 
-  # DELETE /profiles/1
-  def destroy
-    @profile.destroy!
-  end
-
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_profile
     @profile = current_user.profile
@@ -46,6 +44,6 @@ class ProfilesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def profile_params
-    params.require(:profile).permit(:title, :body)
+    params.require(:profile).permit(:weight, :height, :address, :info)
   end
 end
